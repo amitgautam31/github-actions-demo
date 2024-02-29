@@ -16,7 +16,9 @@ jobs:
         with:
           url: 'https://api.xata.io/workspaces/workspace_id/dbs/daily'
           method: 'DELETE'
-          customHeaders: '{"Authorization": $DESTINATION_XATA_API_KEY}'
+          bearerToken: $DESTINATION_XATA_API_KEY
+        # run:
+        #   curl -X POST -H 'Authorization: Bearer ${{ secrets.API_TOKEN }}' https://your-api-endpoint
         env:
           SOURCE_XATA_API_KEY: ${{ secrets.SOURCE_XATA_API_KEY }}
           DESTINATION_XATA_API_KEY: ${{ secrets.DESTINATION_XATA_API_KEY }}
