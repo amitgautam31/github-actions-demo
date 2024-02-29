@@ -18,7 +18,9 @@ jobs:
         #   method: 'DELETE'
         #   bearerToken: $DESTINATION_XATA_API_KEY
         run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.DESTINATION_XATA_API_KEY }}' https://api.xata.io/workspaces/Amit-s-workspace-1ige91/dbs/daily
+          # curl -X DELETE -H 'Authorization: Bearer ${{ secrets.DESTINATION_XATA_API_KEY }}' https://api.xata.io/workspaces/Amit-s-workspace-1ige91/dbs/daily
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.DESTINATION_XATA_API_KEY }}' https://Amit-s-workspace-1ige91.ap-southeast-2.xata.sh/db/dev:daily
+
         env:
           SOURCE_XATA_API_KEY: ${{ secrets.SOURCE_XATA_API_KEY }}
           DESTINATION_XATA_API_KEY: ${{ secrets.DESTINATION_XATA_API_KEY }}
