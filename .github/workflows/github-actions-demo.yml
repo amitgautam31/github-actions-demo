@@ -27,7 +27,6 @@ jobs:
             --from_branch main \
             --from_region ap-southeast-2 \
             --from_XATA_API_KEY $SOURCE_XATA_API_KEY \
-            # --output file
             --to_workspace Amit-s-workspace-1ige91 \
             --to_database dev \
             --to_branch daily \
