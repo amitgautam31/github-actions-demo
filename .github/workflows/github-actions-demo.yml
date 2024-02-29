@@ -8,11 +8,26 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code 
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9' # install the python version needed          
+      - name: Check out repository code & install packages
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          python xreplay.py \
+            --from_workspace Amit-s-workspace-1ige91 \
+            --from_database dev \
+            --from_branch main \
+            --from_region ap-southeast-2 \
+            --from_XATA_API_KEY $SOURCE_XATA_API_KEY \
+            --output file
           ls
+        env:
+          SOME_SECRET: ${{ secrets.SOME_SECRET }}
       - name: cd the content here
         run: ls
       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."      
