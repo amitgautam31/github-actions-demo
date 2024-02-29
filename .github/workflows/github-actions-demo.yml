@@ -14,9 +14,9 @@ jobs:
       - name: cleanup previous backup
         uses: fjogeleit/http-request-action@v1
         with:
-          url: 'https://api.xata.io/workspaces/workspace_id/dbs/db_name'
+          url: 'https://api.xata.io/workspaces/workspace_id/dbs/daily'
           method: 'DELETE'
-          customHeaders: '{"Authorization": "Bearer " + $DESTINATION_XATA_API_KEY}'
+          customHeaders: '{"Authorization": $DESTINATION_XATA_API_KEY}'
       - name: setup python
         uses: actions/setup-python@v4
         with:
