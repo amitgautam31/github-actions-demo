@@ -17,6 +17,9 @@ jobs:
           url: 'https://api.xata.io/workspaces/workspace_id/dbs/daily'
           method: 'DELETE'
           customHeaders: '{"Authorization": $DESTINATION_XATA_API_KEY}'
+        env:
+          SOURCE_XATA_API_KEY: ${{ secrets.SOURCE_XATA_API_KEY }}
+          DESTINATION_XATA_API_KEY: ${{ secrets.DESTINATION_XATA_API_KEY }}
       - name: setup python
         uses: actions/setup-python@v4
         with:
