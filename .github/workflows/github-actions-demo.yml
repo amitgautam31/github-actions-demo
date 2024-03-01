@@ -4,7 +4,7 @@ on:
   push:
   schedule:
     - cron: '0 0 * * *'
-    - cron: '10 0 * * MON'
+    - cron: '10 0 * * SAT'
     - cron: '20 0 1 * *'
 jobs:
   Explore-GitHub-Actions:
@@ -16,7 +16,7 @@ jobs:
       - if: github.event_name == 'push'
         name: cleanup previous backup of daily on push 
         run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
@@ -31,7 +31,7 @@ jobs:
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           REGION: ${{ secrets.REGION }}
-      - if: github.event.schedule == '10 0 * * MON'
+      - if: github.event.schedule == '10 0 * * SAT'
         name: cleanup previous backup of weekly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
@@ -79,7 +79,7 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           REGION: ${{ secrets.REGION }}
       - name : backup database weekly
-        if: github.event.schedule == '0 0 * * MON'
+        if: github.event.schedule == '0 0 * * SAT'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
