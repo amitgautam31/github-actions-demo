@@ -13,12 +13,14 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      # - name: cleanup previous backup
-      #   run: |
-      #     curl -X DELETE -H 'Authorization: Bearer ${{ secrets.DESTINATION_XATA_API_KEY }}' https://Amit-s-workspace-1ige91.ap-southeast-2.xata.sh/db/dev:daily
-      #   env:
-      #     SOURCE_XATA_API_KEY: ${{ secrets.SOURCE_XATA_API_KEY }}
-      #     DESTINATION_XATA_API_KEY: ${{ secrets.DESTINATION_XATA_API_KEY }}
+      - name: cleanup previous backup
+        run: |
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://Amit-s-workspace-1ige91.ap-southeast-2.xata.sh/db/dev:daily
+        env:
+          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
+          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          REGION: ${{ secrets.REGION }}
       - name: setup python 
         uses: actions/setup-python@v4
         with:
