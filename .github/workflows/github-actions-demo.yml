@@ -13,9 +13,37 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: cleanup previous backup
+      - if: github.event_name == 'push'
+        name: cleanup previous backup of weekly 
         run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://Amit-s-workspace-1ige91.ap-southeast-2.xata.sh/db/dev:daily
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
+        env:
+          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
+          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          REGION: ${{ secrets.REGION }}
+      - if: github.event.schedule == '0 0 * * *'
+        name: cleanup previous backup of daily 
+        run: |
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
+        env:
+          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
+          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          REGION: ${{ secrets.REGION }}
+      - if: github.event.schedule == '10 0 * * MON'
+        name: cleanup previous backup of weekly 
+        run: |
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
+        env:
+          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
+          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
+          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+          REGION: ${{ secrets.REGION }}
+      - if: github.event.schedule == '20 0 1 * *'
+        name: cleanup previous backup of monthly 
+        run: |
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:monthly
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
