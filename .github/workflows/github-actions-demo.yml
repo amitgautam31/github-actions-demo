@@ -16,7 +16,7 @@ jobs:
       - if: github.event_name == 'push'
         name: cleanup previous backup of daily on push 
         run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
