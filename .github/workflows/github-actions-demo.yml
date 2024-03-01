@@ -47,7 +47,7 @@ jobs:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secret.REGION }}
+          REGION: ${{ secrets.REGION }}
       - name : backup database weekly
         if: github.event.schedule == '0 0 * * MON'
         run: |
@@ -71,7 +71,7 @@ jobs:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secret.REGION }}
+          REGION: ${{ secrets.REGION }}
       - name : backup database monthly
         if: github.event.schedule == '0 0 1 * *'
         run: |
@@ -95,7 +95,7 @@ jobs:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secret.REGION }}
+          REGION: ${{ secrets.REGION }}
       - name : backup database on push
         if: github.event_name == 'push'
         run: |
@@ -119,5 +119,5 @@ jobs:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secret.REGION }}
+          REGION: ${{ secrets.REGION }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
