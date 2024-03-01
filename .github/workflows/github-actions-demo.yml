@@ -14,7 +14,7 @@ jobs:
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - if: github.event_name == 'push'
-        name: cleanup previous backup of weekly 
+        name: cleanup previous backup of daily on push 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
         env:
