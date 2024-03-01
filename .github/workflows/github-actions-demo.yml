@@ -41,7 +41,7 @@ jobs:
             --to_database $DATABASE_NAME \
             --to_branch daily \
             --to_region $REGION \
-            --to_XATA_API_KEY $DESTINATION_XATA_API_KEY \
+            --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
@@ -65,7 +65,7 @@ jobs:
             --to_database $DATABASE_NAME \
             --to_branch weekly \
             --to_region $REGION \
-            --to_XATA_API_KEY $DESTINATION_XATA_API_KEY \
+            --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
@@ -89,7 +89,7 @@ jobs:
             --to_database $DATABASE_NAME \
             --to_branch monthly \
             --to_region $REGION \
-            --to_XATA_API_KEY $DESTINATION_XATA_API_KEY \
+            --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
@@ -113,7 +113,7 @@ jobs:
             --to_database $DATABASE_NAME \
             --to_branch daily \
             --to_region $REGION \
-            --to_XATA_API_KEY $DESTINATION_XATA_API_KEY \
+            --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
         env:
           XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
