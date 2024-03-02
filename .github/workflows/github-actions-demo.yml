@@ -3,8 +3,13 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
   schedule:
     - cron: '0 0 * * *'
-    - cron: '10 6 * * 6'
+    - cron: '25 6 * * 6'
     - cron: '20 0 1 * *'
+env:
+  XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
+  WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
+  DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
+  REGION: ${{ secrets.REGION }}
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -12,47 +17,34 @@ jobs:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+
+            
+      - if: github.event.schedule == '25 6 * * 6'
+        name: cleanup previous backup of weekly 
+        run: |
+          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
+      
       - if: github.event_name == 'push'
         name: cleanup previous backup of daily on push 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+      
       - if: github.event.schedule == '0 0 * * *'
         name: cleanup previous backup of daily 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
-      - if: github.event.schedule == '10 6 * * 6'
-        name: cleanup previous backup of weekly 
-        run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+
       - if: github.event.schedule == '20 0 1 * *'
         name: cleanup previous backup of monthly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:monthly
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+      
       - name: setup python 
         uses: actions/setup-python@v4
         with:
           python-version: '3.9' # install the python version needed   
       - run: echo "🐍 Setup python completed."
+      
       - name : backup database daily
         if: github.event.schedule == '0 0 * * *'
         run: |
@@ -72,13 +64,9 @@ jobs:
             --to_region $REGION \
             --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+            
       - name : backup database weekly
-        if: github.event.schedule == '10 6 * * 6'
+        if: github.event.schedule == '25 6 * * 6'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
@@ -96,11 +84,7 @@ jobs:
             --to_region $REGION \
             --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+            
       - name : backup database monthly
         if: github.event.schedule == '0 0 1 * *'
         run: |
@@ -120,11 +104,7 @@ jobs:
             --to_region $REGION \
             --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+            
       - name : backup database on push
         if: github.event_name == 'push'
         run: |
@@ -144,9 +124,5 @@ jobs:
             --to_region $REGION \
             --to_XATA_API_KEY $XATA_API_KEY \
             --output xata
-        env:
-          XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
-          WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
-          DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
-          REGION: ${{ secrets.REGION }}
+
       - run: echo "🍏 This job's status is ${{ job.status }}."
