@@ -30,7 +30,7 @@ jobs:
           WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           REGION: ${{ secrets.REGION }}
-      - if: github.event.schedule == '10 0 * * SAT'
+      - if: github.event.schedule == '15 1 * * SAT'
         name: cleanup previous backup of weekly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
@@ -78,7 +78,7 @@ jobs:
           DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
           REGION: ${{ secrets.REGION }}
       - name : backup database weekly
-        if: github.event.schedule == '0 0 * * SAT'
+        if: github.event.schedule == '15 1 * * SAT'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
