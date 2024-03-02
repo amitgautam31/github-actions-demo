@@ -4,8 +4,8 @@ on:
   schedule:
     # * is a special character in YAML so you have to quote this string
     - cron: '0 0 * * *'
-    - cron: '22 9 * * 6'
-    - cron: '20 0 1 * *'
+    - cron: '15 0 * * 1'
+    - cron: '25 0 1 * *'
 env:
   XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
   WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
@@ -20,7 +20,7 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
             
-      - if: github.event.schedule == '22 9 * * 6'
+      - if: github.event.schedule == '15 0 * * 1'
         name: cleanup previous backup of weekly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
@@ -35,7 +35,7 @@ jobs:
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
 
-      - if: github.event.schedule == '20 0 1 * *'
+      - if: github.event.schedule == '25 0 1 * *'
         name: cleanup previous backup of monthly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:monthly
@@ -67,7 +67,7 @@ jobs:
             --output xata
             
       - name : backup database weekly
-        if: github.event.schedule == '22 9 * * 6'
+        if: github.event.schedule == '15 0 * * 1'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
@@ -87,7 +87,7 @@ jobs:
             --output xata
             
       - name : backup database monthly
-        if: github.event.schedule == '0 0 1 * *'
+        if: github.event.schedule == '25 0 1 * *'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
