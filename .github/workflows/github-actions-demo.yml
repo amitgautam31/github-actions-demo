@@ -2,8 +2,8 @@ name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: 
   schedule:
-    - cron: '0 0 * * *'
-    - cron: '35 6 * * 6'
+    # - cron: '0 0 * * *'
+    - cron: '45 6 * * 6'
     - cron: '20 0 1 * *'
 env:
   XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
@@ -19,7 +19,7 @@ jobs:
       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
             
-      - if: github.event.schedule == '35 6 * * 6'
+      - if: github.event.schedule == '45 6 * * 6'
         name: cleanup previous backup of weekly 
         run: |
           curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:weekly
@@ -66,7 +66,7 @@ jobs:
             --output xata
             
       - name : backup database weekly
-        if: github.event.schedule == '35 6 * * 6'
+        if: github.event.schedule == '45 6 * * 6'
         run: |
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
