@@ -6,11 +6,13 @@ on:
     - cron: '0 0 * * *'
     - cron: '15 0 * * 1'
     - cron: '25 0 1 * *'
+  workflow_dispatch:
 env:
   XATA_API_KEY: ${{ secrets.XATA_API_KEY }}
   WORKSPACE_ID: ${{ secrets.WORKSPACE_ID }}
   DATABASE_NAME: ${{ secrets.DATABASE_NAME }}
   REGION: ${{ secrets.REGION }}
+  TEST_ARR: ${{ secrets.TEST_ARR}}
 jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-latest
@@ -28,7 +30,11 @@ jobs:
       - if: github.event_name == 'push'
         name: cleanup previous backup of daily on push 
         run: |
-          curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
+          for i in $TEST_ARR
+          do 
+            echo "this is a loop : $i"
+          done
+          # curl -X DELETE -H 'Authorization: Bearer ${{ secrets.XATA_API_KEY }}' https://$WORKSPACE_ID.$REGION.xata.sh/db/$DATABASE_NAME:daily
       
       - if: github.event.schedule == '0 0 * * *'
         name: cleanup previous backup of daily 
@@ -109,21 +115,25 @@ jobs:
       - name : backup database on push
         if: github.event_name == 'push'
         run: |
-          git clone https://github.com/xataio/xtools.git
-          cd xtools/xreplay
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          python xreplay.py \
-            --from_workspace $WORKSPACE_ID \
-            --from_database $DATABASE_NAME \
-            --from_branch main \
-            --from_region $REGION \
-            --from_XATA_API_KEY $XATA_API_KEY \
-            --to_workspace $WORKSPACE_ID \
-            --to_database $DATABASE_NAME \
-            --to_branch daily \
-            --to_region $REGION \
-            --to_XATA_API_KEY $XATA_API_KEY \
-            --output xata
+          for i in $TEST_ARR
+          do 
+          echo "this is a loop : $i"
+          done
+          # git clone https://github.com/xataio/xtools.git
+          # cd xtools/xreplay
+          # python -m pip install --upgrade pip
+          # pip install -r requirements.txt
+          # python xreplay.py \
+          #   --from_workspace $WORKSPACE_ID \
+          #   --from_database $DATABASE_NAME \
+          #   --from_branch main \
+          #   --from_region $REGION \
+          #   --from_XATA_API_KEY $XATA_API_KEY \
+          #   --to_workspace $WORKSPACE_ID \
+          #   --to_database $DATABASE_NAME \
+          #   --to_branch daily \
+          #   --to_region $REGION \
+          #   --to_XATA_API_KEY $XATA_API_KEY \
+          #   --output xata
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
