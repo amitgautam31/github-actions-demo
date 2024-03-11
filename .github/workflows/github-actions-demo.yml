@@ -61,7 +61,7 @@ jobs:
         if: github.event.schedule == '0 0 * * *'
         run: |
           for DB in $DATABASE_NAMES; do
-          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
+          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
           status_code=$(echo "$response" | tail -n1)
           if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
@@ -87,7 +87,7 @@ jobs:
         if: github.event.schedule == '15 0 * * 1'
         run: |
           for DB in $DATABASE_NAMES; do
-          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
+          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
           status_code=$(echo "$response" | tail -n1)
           if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
@@ -113,7 +113,7 @@ jobs:
         if: github.event.schedule == '25 0 1 * *'
         run: |
           for DB in $DATABASE_NAMES; do
-          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
+          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
           status_code=$(echo "$response" | tail -n1)
           if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
@@ -139,7 +139,7 @@ jobs:
         if: github.event_name == 'push'
         run: |
           for DB in $DATABASE_NAMES; do
-            response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
+            response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
             status_code=$(echo "$response" | tail -n1)
             if [ $status_code != 404 ]; then
               git clone https://github.com/xataio/xtools.git
