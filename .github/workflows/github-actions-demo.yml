@@ -62,7 +62,8 @@ jobs:
         run: |
           for DB in $DATABASE_NAMES; do
           response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
-          if [ $response != 404 ]; then
+          status_code=$(echo "$response" | tail -n1)
+          if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
           python -m pip install --upgrade pip
@@ -87,7 +88,8 @@ jobs:
         run: |
           for DB in $DATABASE_NAMES; do
           response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
-          if [ $response != 404 ]; then
+          status_code=$(echo "$response" | tail -n1)
+          if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
           python -m pip install --upgrade pip
@@ -112,7 +114,8 @@ jobs:
         run: |
           for DB in $DATABASE_NAMES; do
           response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
-          if [ $response != 404 ]; then
+          status_code=$(echo "$response" | tail -n1)
+          if [ $status_code != 404 ]; then
           git clone https://github.com/xataio/xtools.git
           cd xtools/xreplay
           python -m pip install --upgrade pip
@@ -136,25 +139,26 @@ jobs:
         if: github.event_name == 'push'
         run: |
           for DB in $DATABASE_NAMES; do
-          response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
-          if [ $response != 404 ]; then
-          git clone https://github.com/xataio/xtools.git
-          cd xtools/xreplay
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          python xreplay.py \
-            --from_workspace $WORKSPACE_ID \
-            --from_database $DB \
-            --from_branch main \
-            --from_region $REGION \
-            --from_XATA_API_KEY $XATA_API_KEY \
-            --to_workspace $WORKSPACE_ID \
-            --to_database $DB \
-            --to_branch daily \
-            --to_region $REGION \
-            --to_XATA_API_KEY $XATA_API_KEY \
-            --output xata
-          fi
+            response=$(curl -s -w "%{http_code}" -X POST -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main')
+            status_code=$(echo "$response" | tail -n1)
+            if [ $status_code != 404 ]; then
+              git clone https://github.com/xataio/xtools.git
+              cd xtools/xreplay
+              python -m pip install --upgrade pip
+              pip install -r requirements.txt
+              python xreplay.py \
+                --from_workspace $WORKSPACE_ID \
+                --from_database $DB \
+                --from_branch main \
+                --from_region $REGION \
+                --from_XATA_API_KEY $XATA_API_KEY \
+                --to_workspace $WORKSPACE_ID \
+                --to_database $DB \
+                --to_branch daily \
+                --to_region $REGION \
+                --to_XATA_API_KEY $XATA_API_KEY \
+                --output xata
+            fi
           done
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
