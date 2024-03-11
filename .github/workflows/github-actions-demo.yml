@@ -140,10 +140,8 @@ jobs:
         run: |
           for DB in $DATABASE_NAMES; do
             response=$(curl -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
-            echo $response | jq '.tables'
-            status_code=$(echo "$response" | tail -n1)
-            echo "status code is : $status_code"
-            if [ $status_code != 404 ]; then
+            status = $(echo $response | grep -o '"tables":\[.*\]' | grep -Eo '\[.*\]')
+            if [ $status != '[]' ]; then
               git clone https://github.com/xataio/xtools.git
               cd xtools/xreplay
               python -m pip install --upgrade pip
