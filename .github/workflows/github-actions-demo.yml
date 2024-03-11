@@ -140,7 +140,8 @@ jobs:
         run: |
           for DB in $DATABASE_NAMES; do
             response=$(curl -H "Authorization: Bearer ${{ secrets.XATA_API_KEY }}" https://$WORKSPACE_ID.$REGION.xata.sh/db/$DB:main)
-            status = $(echo $response | grep -o '"tables":\[.*\]' | grep -Eo '\[.*\]')
+            status=$(echo $response | grep -o '"tables":\[.*\]' | grep -Eo '\[.*\]')
+            echo "status is $status"
             if [ $status != '[]' ]; then
               git clone https://github.com/xataio/xtools.git
               cd xtools/xreplay
